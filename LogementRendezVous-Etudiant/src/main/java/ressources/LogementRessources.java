@@ -43,17 +43,16 @@ public class LogementRessources {
 @PUT
 @Consumes("application/xml")
     public Response updateLogement(Logement updatedLogement,@PathParam("ref") int reference) {
-
-
-        if (logementMetier.updateLogement(reference,updatedLogement)) {
+    if (logementMetier.updateLogement(reference,updatedLogement)) {
             return Response.status(Status.OK).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
 
-
-        public  Response deleteLogement(int reference){
+    @Path("{ref}")
+    @DELETE
+        public  Response deleteLogement( @PathParam("ref") int reference){
            if(logementMetier.deleteLogement(reference))
                     return Response.status(Status.OK).build();
 

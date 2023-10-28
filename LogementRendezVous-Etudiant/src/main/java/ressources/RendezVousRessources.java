@@ -9,19 +9,23 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+@Path("rendezvous")
 
 
 public class RendezVousRessources {
 
     public static RendezVousBusiness rendezVousMetier = new RendezVousBusiness();
 
+    @POST
+    @Consumes("application/json")
     public Response addrendezVous(RendezVous r) {
         if(rendezVousMetier.addRendezVous(r))
             return  Response.status(Response.Status.CREATED).build();
         return  Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
-
-    public Response getRendezVous(String refLogement) {
+    @GET
+    @Produces("application/json")
+    public Response getRendezVous(@QueryParam("refLogement") String refLogement) {
         List<RendezVous> liste=new ArrayList<RendezVous>();
         if(refLogement != null) {
             liste = rendezVousMetier.getListeRendezVousByLogementReference(Integer.parseInt(refLogement));
@@ -35,7 +39,9 @@ public class RendezVousRessources {
         return  Response.status(Response.Status.OK).entity(liste).build();
     }
 
-
+    @Path("{id}")
+    @PUT
+    @Consumes("application/json")
     public Response updateRdv(RendezVous updatedRendezVous, @PathParam("id") int id) {
 
 
@@ -46,7 +52,8 @@ public class RendezVousRessources {
         }
     }
 
-
+    @Path("{id}")
+    @DELETE
     public  Response deleteRendezVous(int id){
         if(rendezVousMetier.deleteRendezVous(id))
             return Response.status(Response.Status.OK).build();
@@ -55,7 +62,9 @@ public class RendezVousRessources {
         return Response.status(Response.Status.NOT_FOUND).build();
 
     }
-
+    @Path("{id}")
+    @GET
+    @Produces("application/json")
     public  Response getRendezVousbyId(int id){
         if(rendezVousMetier.getRendezVousById(id)!=null)
             return Response.status(Response.Status.OK).entity(rendezVousMetier.getRendezVousById(id)).build();
